@@ -1,0 +1,41 @@
+# Building images
+
+docker build -f api.Dockerfile \
+-t dojo-api .
+
+docker build -f postgres.Dockerfile \
+-t dojo-postgres .
+
+docker build -f web.Dockerfile \
+--build-arg REACT_APP_BASE_URL=http://localhost:5001 \
+-t dojo-web .
+
+# Creating network
+
+docker network create dojo-net
+
+# Running the containers
+
+docker run --name dojo-postgres \
+-p 5432:5432 \
+-d \
+--net dojo-net \
+--rm -d dojo-postgres
+
+docker run --name dojo-api \
+-p 5001:5001 \
+--net dojo-net -d \
+--rm dojo-api
+
+docker run --name dojo-web \
+-p 3000:3000 \
+--net dojo-net \
+--rm -d dojo-web
+
+docker exec -it dojo-postgres ash
+docker exec -it dojo-postgres psql -U test -c "SELECT * FROM todos;"
+
+docker-compose up
+docker-compose down
+docker-compose exec -it postgres ash
+docker-compose exec -it postgres psql -U test -c "SELECT * FROM todos;"

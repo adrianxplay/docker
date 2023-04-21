@@ -1,0 +1,7 @@
+api/**/__pycache__
+api/instance
+.venv
+web/node_modules
+.env
+.idea
+data

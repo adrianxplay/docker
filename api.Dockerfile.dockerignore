@@ -1,0 +1,6 @@
+**/__pycache__
+api/**/__pycache__
+api/instance
+api/README.md
+web
+.venv

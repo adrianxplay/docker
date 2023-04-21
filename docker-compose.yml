@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:14.7-alpine
+    env_file:
+      - .env
+#    volumes:
+#      - ./data:/var/lib/postgresql/data
+  api:
+    env_file:
+      - .env
+    build:
+      dockerfile: ./api.Dockerfile
+    ports:
+      - '5001:5001'
+    depends_on:
+      - postgres
+
+  web:
+    env_file:
+        - .env
+    build:
+      dockerfile: ./web.Dockerfile
+      args:
+        - REACT_APP_BASE_URL=${REACT_APP_BASE_URL}
+    ports:
+      - '3000:3000'
+#    volumes:
+#      - ./web/build:/app
